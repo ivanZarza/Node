@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const userRoutes = require("./routers/user.routers");
+const bookRouters = require("./routers/book.routers");
 const errorHandling = require("./error/errorHandling");
 
 const app = express();
@@ -16,10 +16,10 @@ app.use((req, res, next) => {
   console.log("URL: " + req.url);
   console.log("Metodo: " + req.method);
   console.log("User-agent: " + req.headers["user-agent"]);
-  res.status(200).json({ ok:true, message:"Recibido" });    
+  next();  
 });
 
-app.use(userRoutes);
+app.use(bookRouters);
 
 app.use(errorHandling);
 
