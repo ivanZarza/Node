@@ -1,23 +1,41 @@
 const {Book} = require('../models/classBook');
 
-const book1 = new Book(1, 1, 'El señor de los anillos', 'Aventura', 'J.R.R. Tolkien', 100, 'imagen');
+const book1 = new Book(1, 1, 'El señor de los anillos', 'Aventura', 'J.R.R. Tolkien', 100, 'https://proassetspdlcom.cdnstatics2.com/usuaris/libros/thumbs/24fb5128-9aaf-4802-8222-047db4b93ef3/d_360_620/portada_el-senor-de-los-anillos_j-r-r-tolkien_201601252224.webp');
+const book2 = new Book(2, 2, 'El hobit', 'Aventura', 'J.R.R. Tolkien', 150, 'https://proassetspdlcom.cdnstatics2.com/usuaris/libros/thumbs/24fb5128-9aaf-4802-8222-047db4b93ef3/d_360_620/portada_el-senor-de-los-anillos_j-r-r-tolkien_201601252224.webp');
+const book3 = new Book(3, 3, 'El señor de los anillos', 'Aventura', 'J.R.R. Tolkien', 100, 'https://proassetspdlcom.cdnstatics2.com/usuaris/libros/thumbs/24fb5128-9aaf-4802-8222-047db4b93ef3/d_360_620/portada_el-senor-de-los-anillos_j-r-r-tolkien_201601252224.webp');
+const book4 = new Book(4, 4, 'El hobit', 'Aventura', 'J.R.R. Tolkien', 150, 'https://proassetspdlcom.cdnstatics2.com/usuaris/libros/thumbs/24fb5128-9aaf-4802-8222-047db4b93ef3/d_360_620/portada_el-senor-de-los-anillos_j-r-r-tolkien_201601252224.webp');
+const book5 = new Book(5, 5, 'El señor de los anillos', 'Aventura', 'J.R.R. Tolkien', 100, 'https://proassetspdlcom.cdnstatics2.com/usuaris/libros/thumbs/24fb5128-9aaf-4802-8222-047db4b93ef3/d_360_620/portada_el-senor-de-los-anillos_j-r-r-tolkien_201601252224.webp');
+
+
+let books = [book1, book2, book3, book4, book5];
 
 
 
-
-function getBook (req, res) {
+function getBook(req, res) {
   try {
-    res.status(200).json({ ok:true, message:'Exito!!', data:book1 });
+    const id = req.query.id;
+    if (id) {
+      const book = books.find(book => book.id_book === parseInt(id));
+      if (!book) {
+        return res.status(404).json({ ok: false, message: 'Libro no encontrado' });
+      }
+      return res.status(200).json({ ok: true, message: 'Exito!!', data: [book] });
+    } else {
+      return res.status(200).json({ ok: true, message: 'Exito!!', data: books });
+    }
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
-  } 
+    console.log(error);
+  }
 }
 
 function postBook (req, res) {
   try {
-    const { book_id, user_id, title, type, author,price, image } = req.body;
-    const book = new Book(book_id, user_id, title, type, author, price, image);
+    const { id_book, id_user, title, type, author,price, image } = req.body;
+    const book = new Book(id_book, id_user, title, type, author, price, image);
     console.log(book);
+    books.push(book);
+    console.log(req.body);
     res.status(200).json({ ok:true, message:'Exito!!', data:book });
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
@@ -42,14 +60,9 @@ function putBook (req, res) {
     
 function deleteBook (req, res) {
   try {
-    book1.id_book = null;
-    book1.id_user = null;
-    book1.title = null;
-    book1.type = null;
-    book1.author = null;
-    book1.price = null;
-    book1.photo = null;
-    res.status(200).json({ ok:true, message:'Exito!!', data:book1 });
+    const id = req.query.id;
+    books = books.filter(book => book.id_book !== parseInt(id));
+    res.status(200).json({ ok:true, message:'Exito!!', data:books });
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
   }

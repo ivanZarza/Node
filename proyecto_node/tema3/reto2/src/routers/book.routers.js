@@ -2,12 +2,12 @@ const { Router } = require('express');
 const router = Router();
 const bookCtrl = require('../controller/book.controller');
 
-router.get('/book', bookCtrl.getBook);
+router.get('/books', bookCtrl.getBook);
 
-router.post('/book', bookCtrl.postBook);
+router.post('/books', bookCtrl.postBook);
 
-router.put('/book', bookCtrl.putBook);
+router.put('/books', bookCtrl.putBook);
 
-router.delete('/book', bookCtrl.deleteBook);
+router.delete('/books', bookCtrl.deleteBook);
 
 module.exports = router;
